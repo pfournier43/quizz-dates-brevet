@@ -210,18 +210,17 @@ function startQuiz(nbQuestions) {
   const correctAnswer = askForDate ? item.date : item.event;
   const resultType = checkAnswer(userInput, correctAnswer);
 
-  if (resultType === "exact") {
+  if (resultType === "exact" || resultType === "partial") {
     score++;
     soundCorrect.play();
-    result.innerHTML = `<div class="correct">✅ Bonne réponse !</div>`;
-  } else if (resultType === "partial") {
-    soundWrong.play();
-    result.innerHTML = `<div class="partial">🟧 Réponse partiellement correcte.<br>Bonne réponse : <strong>${correctAnswer}</strong></div>`;
+    const message = resultType === "exact"
+      ? `✅ Bonne réponse !`
+      : `🟧 Réponse partiellement correcte.<br>Bonne réponse : <strong>${correctAnswer}</strong>`;
+    result.innerHTML = `<div class="${resultType === "exact" ? 'correct' : 'partial'}">${message}</div>`;
   } else {
     soundWrong.play();
     result.innerHTML = `<div class="wrong">❌ Mauvaise réponse.<br>Bonne réponse : <strong>${correctAnswer}</strong></div>`;
   }
-
   current++;
   scoreboard.innerText = `Score : ${score}`;
   setTimeout(showQuestion, 2500);
