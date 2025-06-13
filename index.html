@@ -309,11 +309,13 @@ function showQuestion() {
   clearInterval(timer);
   document.getElementById('result').innerHTML = '';
   document.getElementById('timer').innerText = '';
-  if (current >= order.length) {
-    document.getElementById('quiz').innerHTML = `<div class="correct">🎉 Fin du quiz ! Score : ${score} / ${order.length}</div>`;
-    return;
-  }
-
+ if (current >= order.length) {
+  document.getElementById('quiz').innerHTML = `
+    <div class="correct">🎉 Fin du quiz ! Score : ${score} / ${order.length}</div>
+    <button onclick="restartQuiz()">🔁 Rejouer</button>
+  `;
+  return;
+}
   const item = order[current];
   askForDate = Math.random() < 0.5;
   const questionText = askForDate
@@ -379,6 +381,14 @@ const partialSound = document.getElementById('sound-partial');
   current++;
   setTimeout(showQuestion, 2500);
 }
+  function restartQuiz() {
+  document.getElementById('start-menu').style.display = 'block';
+  document.getElementById('quiz').innerHTML = '';
+  document.getElementById('result').innerHTML = '';
+  document.getElementById('scoreboard').innerText = 'Score : 0';
+  document.getElementById('timer').innerText = '';
+}
+
 </script>
 </body>
 </html>
