@@ -66,6 +66,13 @@
       margin-top: 10px;
       color: #721c24;
     }
+    .partial {
+  background-color: #fff3cd;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  color: #856404;
+}
   </style>
 </head>
 <body>
@@ -145,19 +152,26 @@
       return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "");
     }
 
-    function checkAnswer(input, answer) {
-  const normalizedInput = normalize(input);
-  const normalizedAnswer = normalize(answer);
+    function normalize(str) {
+  return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "");
+}
 
-  const answerWords = normalizedAnswer.split(/\s|-/).filter(w => w.length >= 3);
-  const userWords = normalizedInput.split(/\s|-/).filter(w => w.length >= 2);
+function checkAnswer(input, answer) {
+  const normInput = normalize(input);
+  const normAnswer = normalize(answer);
 
-  // La réponse est correcte si au moins un mot de la réponse contient (ou est contenu dans) un mot saisi
-  return userWords.some(userWord =>
-    answerWords.some(answerWord =>
-      answerWord.includes(userWord) || userWord.includes(answerWord)
-    )
+  if (normInput === normAnswer) {
+    return "exact";
+  }
+
+  const inputWords = normInput.split(/\s|-/).filter(w => w.length >= 2);
+  const answerWords = normAnswer.split(/\s|-/).filter(w => w.length >= 3);
+
+  const partialMatch = inputWords.some(iw =>
+    answerWords.some(aw => aw.includes(iw) || iw.includes(aw))
   );
+
+  return partialMatch ? "partial" : "wrong";
 }
 
     function showQuestion() {
@@ -186,23 +200,27 @@
     }
 
     function submitAnswer() {
-      const userInput = document.getElementById('answer').value;
-      const item = order[current];
-      const correct = askForDate ? item.date : item.event;
-      const isCorrect = checkAnswer(userInput, correct);
+  const userInput = document.getElementById('answer').value;
+  const item = order[current];
+  const correctAnswer = askForDate ? item.date : item.event;
+  const resultType = checkAnswer(userInput, correctAnswer);
 
-      if (isCorrect) {
-        score++;
-        soundCorrect.play();
-        result.innerHTML = `<div class="correct">✅ Bonne réponse !</div>`;
-      } else {
-        soundWrong.play();
-        result.innerHTML = `<div class="wrong">❌ Mauvaise réponse. La bonne réponse était : <strong>${correct}</strong></div>`;
-      }
-      current++;
-      scoreboard.innerText = `Score : ${score}`;
-      setTimeout(showQuestion, 2000);
-    }
+  if (resultType === "exact") {
+    score++;
+    soundCorrect.play();
+    result.innerHTML = `<div class="correct">✅ Bonne réponse !</div>`;
+  } else if (resultType === "partial") {
+    soundWrong.play();
+    result.innerHTML = `<div class="partial">🟧 Réponse partiellement correcte.<br>Bonne réponse : <strong>${correctAnswer}</strong></div>`;
+  } else {
+    soundWrong.play();
+    result.innerHTML = `<div class="wrong">❌ Mauvaise réponse.<br>Bonne réponse : <strong>${correctAnswer}</strong></div>`;
+  }
+
+  current++;
+  scoreboard.innerText = `Score : ${score}`;
+  setTimeout(showQuestion, 2500);
+}
 
     showQuestion();
   </script>
