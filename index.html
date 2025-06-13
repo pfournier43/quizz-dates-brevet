@@ -3,281 +3,382 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Quiz Dates du Brevet</title>
-  <style>
+  <title>Quiz Brevet QCM</title>
+ <style>
+  body {
+    font-family: sans-serif;
+    padding: 20px;
+    max-width: 700px;
+    margin: auto;
+    background: linear-gradient(to bottom, #e6f0ff, #ffffff);
+  }
+  .question {
+    margin: 20px 0;
+  }
+  .result {
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+  input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    font-size: 1em;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+  button {
+    margin: 5px;
+    padding: 12px 16px;
+    font-size: 1em;
+    background-color: #0052cc;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  button:hover {
+    background-color: #003d99;
+  }
+  #scoreboard {
+    font-weight: bold;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    color: #333;
+  }
+  .correct {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  .wrong {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  .partial {
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  #timer {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #d9534f;
+    margin-top: 10px;
+  }
+
+  @media (max-width: 600px) {
     body {
-      font-family: sans-serif;
-      padding: 20px;
-      max-width: 700px;
-      margin: auto;
-      background: linear-gradient(to bottom, #e6f0ff, #ffffff);
-    }
-    .question {
-      margin: 20px 0;
-    }
-    .result {
-      margin-top: 20px;
-      font-weight: bold;
-      font-size: 1.2em;
-    }
-    input[type="text"] {
-      width: 100%;
-      padding: 12px;
-      margin-top: 8px;
-      font-size: 1em;
-      border-radius: 6px;
-      border: 1px solid #ccc;
+      padding: 10px;
+      font-size: 16px;
     }
     button {
-      margin-top: 10px;
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #0052cc;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #003d99;
-    }
-    #scoreboard {
-      font-weight: bold;
-      margin-bottom: 20px;
-      font-size: 1.2em;
-      color: #333;
-    }
-    .correct {
-      background-color: #d4edda;
-      padding: 10px;
-      border-radius: 5px;
-      margin-top: 10px;
-      color: #155724;
-    }
-    .wrong {
-      background-color: #f8d7da;
-      padding: 10px;
-      border-radius: 5px;
-      margin-top: 10px;
-      color: #721c24;
-    }
-    .partial {
-      background-color: #fff3cd;
-      padding: 10px;
-      border-radius: 5px;
-      margin-top: 10px;
-      color: #856404;
-    }
-    #timer {
-      font-size: 1.2em;
-      font-weight: bold;
-      color: #d9534f;
-      margin-top: 10px;
-    }
-    #restart-btn {
-      margin-top: 20px;
-      padding: 10px 20px;
       font-size: 1em;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
+      margin: 8px 0;
     }
-    #restart-btn:hover {
-      background-color: #218838;
+    #quiz, .question, .result, #scoreboard, #timer {
+      font-size: 1em;
     }
-  </style>
+  }@media (prefers-color-scheme: dark) {
+  body {
+    background: linear-gradient(to bottom, #1e1e1e, #2c2c2c);
+    color: #f0f0f0;
+  }
+
+  input[type="text"] {
+    background-color: #2c2c2c;
+    color: #f0f0f0;
+    border: 1px solid #666;
+  }
+
+  button {
+    background-color: #3366cc;
+  }
+
+  button:hover {
+    background-color: #264d99;
+  }
+
+  .correct {
+    background-color: #2e7d32;
+    color: #c8e6c9;
+  }
+
+  .wrong {
+    background-color: #c62828;
+    color: #ffcdd2;
+  }
+
+  .partial {
+    background-color: #fbc02d;
+    color: #fff8e1;
+  }
+
+  #scoreboard {
+    color: #f0f0f0;
+  }
+
+  #timer {
+    color: #f08080;
+  }
+}
+
+</style>
 </head>
 <body>
-  <h1>Quiz Dates du Brevet</h1>
+  <h1>Quiz Brevet : Dates à connaître</h1>
   <div id="scoreboard">Score : 0</div>
   <div id="quiz"></div>
   <div class="result" id="result"></div>
   <div id="timer"></div>
   <div id="start-menu">
-    <p>Combien de questions voulez-vous ?</p>
-    <button onclick="startQuiz(5)">5</button>
-    <button onclick="startQuiz(10)">10</button>
-    <button onclick="startQuiz(20)">20</button>
-    <button onclick="startQuiz(data.length)">Toutes</button>
+    <p>Choisissez le mode :</p>
+    <button onclick="chooseMode(false)">📝 Saisie libre</button>
+    <button onclick="chooseMode(true)">❓ QCM</button>
+    <br><br>
+    <div id="question-count" style="display:none;">
+      <p>Combien de questions ?</p>
+      <button onclick="startQuiz(5)">5</button>
+      <button onclick="startQuiz(10)">10</button>
+      <button onclick="startQuiz(20)">20</button>
+      <button onclick="startQuiz(data.length)">Toutes</button>
+    </div>
   </div>
-  <audio id="sound-correct" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
-  <audio id="sound-wrong" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
+<audio id="sound-correct" src="success.mp3" preload="auto"></audio>
+<audio id="sound-wrong" src="fail.mp3" preload="auto"></audio>
+<audio id="sound-partial" src="partial.mp3" preload="auto"></audio>
+<script>
+const data = [
+ // Thème 1 : Guerres mondiales
+  { date: "28 juin 1914", event: "Assassinat de l’archiduc François Ferdinand à Sarajevo" },
+  { date: "août 1914 - novembre 1918", event: "Première Guerre Mondiale (la Grande Guerre)" },
+  { date: "1915", event: "Génocide arménien par l’Empire Ottoman" },
+  { date: "21 fév. - 18 déc. 1916", event: "Bataille de Verdun" },
+  { date: "1916", event: "Bataille de la Somme" },
+  { date: "1917", event: "Chemin des Dames" },
+  { date: "6 avril 1917", event: "Entrée en guerre des États-Unis" },
+  { date: "octobre 1917", event: "Début de la révolution russe" },
+  { date: "8 janvier 1918", event: "14 points du président Wilson" },
+  { date: "3 mars 1918", event: "Traité de Brest-Litovsk (paix Russie/Allemagne)" },
+  { date: "11 novembre 1918", event: "Armistice à Rethondes" },
+  { date: "28 juin 1919", event: "Traité de Versailles" },
+  { date: "1929", event: "Collectivisation des terres en URSS" },
+  { date: "octobre 1929", event: "Crise économique venue des États-Unis" },
+  { date: "janvier 1933", event: "Hitler devient chancelier en Allemagne" },
+  { date: "1933 - 1945", event: "Allemagne nazie" },
+  { date: "1935", event: "Lois de Nuremberg (antisémitisme)" },
+  { date: "1936", event: "Front Populaire et lois sociales (France)" },
+  { date: "1936 - 1938", event: "Grande Terreur et procès de Moscou en URSS" },
+  { date: "1922 - 1943", event: "Mussolini au pouvoir en Italie" },
+  { date: "1er septembre 1939", event: "Invasion de la Pologne par l’Allemagne" },
+  { date: "sept. 1939 - 8 mai 1945", event: "Seconde Guerre mondiale en Europe" },
+  { date: "2 septembre 1945", event: "Fin de la Seconde Guerre mondiale (monde)" },
+  { date: "17 juin 1940", event: "Pétain proclame l’armistice" },
+  { date: "18 juin 1940", event: "Appel du général de Gaulle" },
+  { date: "22 juin 1940", event: "Armistice franco-allemand" },
+  { date: "10 juillet 1940", event: "Pétain obtient les pleins pouvoirs" },
+  { date: "3 octobre 1940", event: "Loi antisémite en France (statut des Juifs)" },
+  { date: "1940 - 1944", event: "Régime de Vichy" },
+  { date: "22 juin 1941", event: "Hitler attaque l’URSS (Barbarossa)" },
+  { date: "7 décembre 1941", event: "Attaque de Pearl Harbor" },
+  { date: "juillet 1942", event: "Rafle du Vel’ d’Hiv à Paris" },
+  { date: "sept. 1942 - fév. 1943", event: "Bataille de Stalingrad" },
+  { date: "6 juin 1944", event: "Débarquement de Normandie" },
+  { date: "1945", event: "Conférence de Yalta" },
+  { date: "6 et 9 août 1945", event: "Bombes atomiques sur Hiroshima et Nagasaki" },
 
-  <script>
-    const data = [
-      { date: "3 août 1914", event: "L'Allemagne déclare la guerre à la France" },
-      { date: "août - octobre 1914", event: "Guerre de mouvement" },
-      { date: "novembre 1914 - mars 1918", event: "Guerre de position (tranchées)" },
-      { date: "mars - novembre 1918", event: "Reprise de la guerre de mouvement" },
-      { date: "1915 - 1916", event: "Génocide des Arméniens par l'Empire Ottoman" },
-      { date: "21 février - 18 décembre 1916", event: "Bataille de Verdun" },
-      { date: "1er juillet - 18 novembre 1916", event: "Bataille de la Somme" },
-      { date: "6 avril 1917", event: "Entrée en guerre des États-Unis" },
-      { date: "16 avril 1917", event: "Bataille du chemin des Dames et mutineries" },
-      { date: "7 novembre 1917", event: "Révolution d'Octobre en Russie" },
-      { date: "8 janvier 1918", event: "Discours des 14 points de Wilson" },
-      { date: "3 mars 1918", event: "Traité de Brest-Litovsk (Allemagne - Russie)" },
-      { date: "juillet 1918", event: "Seconde bataille de la Marne" },
-      { date: "11 novembre 1918", event: "Signature de l'armistice" },
-      { date: "28 juin 1919", event: "Traité de Versailles" },
-      { date: "1917", event: "Révolutions russes" },
-      { date: "octobre 1929", event: "Crise boursière aux États-Unis" },
-      { date: "1922 - 1943", event: "Mussolini au pouvoir en Italie" },
-      { date: "1924 - 1953", event: "Staline au pouvoir en URSS" },
-      { date: "1933 - 1945", event: "Hitler au pouvoir en Allemagne" },
-      { date: "1936 - 1938", event: "Front populaire en France" },
-      { date: "1939", event: "Début de la Seconde Guerre mondiale" },
-      { date: "1er septembre 1939", event: "Invasion de la Pologne" },
-      { date: "3 septembre 1939", event: "Déclaration de guerre par France et Royaume-Uni" },
-      { date: "avril 1940", event: "Invasion du Danemark et de la Norvège" },
-      { date: "10 mai 1940", event: "Invasion de la France" },
-      { date: "18 juin 1940", event: "Appel du Général de Gaulle à la BBC" },
-      { date: "22 juin 1940", event: "Armistice signé avec l’Allemagne" },
-      { date: "22 juin 1941", event: "Invasion de l’URSS par l’Allemagne" },
-      { date: "7 décembre 1941", event: "Attaque de Pearl Harbor" },
-      { date: "1942", event: "Occupation de nombreux territoires par l’Axe" },
-      { date: "juin 1942", event: "Bataille de Midway (tournant du Pacifique)" },
-      { date: "juillet 1942", event: "Rafle du Vel d’Hiv à Paris" },
-      { date: "sept. 1942 - fév. 1943", event: "Bataille de Stalingrad" },
-      { date: "8 novembre 1942", event: "Débarquement allié en Afrique du Nord" },
-      { date: "mai 1943", event: "Création du CNR (Conseil National de la Résistance)" },
-      { date: "6 juin 1944", event: "Débarquement en Normandie" },
-      { date: "30 avril 1945", event: "Suicide d’Hitler" },
-      { date: "8 mai 1945", event: "Capitulation allemande" },
-      { date: "6 août 1945", event: "Bombe atomique sur Hiroshima" },
-      { date: "9 août 1945", event: "Bombe atomique sur Nagasaki" },
-      { date: "2 septembre 1945", event: "Capitulation du Japon" }
-    ];
+  // Thème 2 : Monde depuis 1945
+  { date: "1945", event: "Création de l’ONU" },
+  { date: "12 mars 1947", event: "Doctrine Truman" },
+  { date: "5 juin 1947", event: "Plan Marshall" },
+  { date: "22 septembre 1947", event: "Doctrine Jdanov" },
+  { date: "1947 - 1991", event: "Guerre froide" },
+  { date: "1948 - 1949", event: "Blocus de Berlin" },
+  { date: "1950 - 1953", event: "Guerre de Corée" },
+  { date: "1951", event: "Création de la CECA" },
+  { date: "1957", event: "Traité de Rome, création de la CEE" },
+  { date: "août 1961", event: "Construction du mur de Berlin" },
+  { date: "octobre 1962", event: "Crise des missiles de Cuba" },
+  { date: "1962", event: "Indépendance de l’Algérie" },
+  { date: "1963 - 1973", event: "Guerre du Vietnam" },
+  { date: "9 novembre 1989", event: "Chute du mur de Berlin" },
+  { date: "26 décembre 1991", event: "Fin de l’URSS" },
+  { date: "1992", event: "Traité de Maastricht (CEE devient UE)" },
+  { date: "2002", event: "L’euro devient monnaie officielle" },
 
-    let current = 0;
-    let score = 0;
-    let order = [];
-    let askForDate = true;
-    let timer;
-    let timeLeft = 15;
+  // Thème 3 : Vie politique et sociale française
+  { date: "1944 - 1945", event: "Libération et programme du CNR (Sécurité sociale)" },
+  { date: "1944", event: "Droit de vote des femmes" },
+  { date: "1945", event: "Naissance de la sécurité sociale" },
+  { date: "1945 - 1973", event: "Les Trente Glorieuses" },
+  { date: "1946 - 1954", event: "Guerre d’Indochine" },
+  { date: "1954 - 1962", event: "Guerre d’Algérie" },
+  { date: "1956", event: "Indépendance du Maroc et de la Tunisie" },
+  { date: "1958", event: "Naissance de la Ve République" },
+  { date: "1962", event: "Élection du président au suffrage universel direct" },
+  { date: "1974", event: "Crise pétrolière" },
+  { date: "1974", event: "Majorité à 18 ans" },
+  { date: "1974", event: "Loi Veil sur l’IVG" },
+  { date: "1981", event: "Première alternance (élection de Mitterrand)" },
+  { date: "1981", event: "Abolition de la peine de mort" },
 
-    const quiz = document.getElementById('quiz');
-    const result = document.getElementById('result');
-    const scoreboard = document.getElementById('scoreboard');
-    const soundCorrect = document.getElementById('sound-correct');
-    const soundWrong = document.getElementById('sound-wrong');
+  // Monde contemporain
+  { date: "1991", event: "Fin du monde bipolaire" },
+  { date: "1991", event: "1ère guerre du Golfe" },
+  { date: "1992 - 1995", event: "Guerre de Bosnie-Herzégovine" },
+  { date: "1998", event: "Mise en place des 35 heures" },
+  { date: "11 septembre 2001", event: "Attentats contre les États-Unis" },
+  { date: "2001 - 2014", event: "2e guerre d'Afghanistan" },
+  { date: "2003 - 2011", event: "2e guerre d'Irak" },
+  { date: "2002", event: "Construction de la barrière de séparation israélienne" },
+  { date: "2013", event: "Mariage pour tous en France" },
+  { date: "13 novembre 2015", event: "Attentats du Bataclan à Paris" },
+  { date: "2018 - 2019", event: "Mouvement des Gilets jaunes" },
+  { date: "2019 - 2022", event: "Pandémie de COVID-19" }
+];
 
-    function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    }
+let current = 0;
+let score = 0;
+let order = [];
+let askForDate = true;
+let isQCM = false;
+let timer;
+let timeLeft = 45;
 
-    function normalize(str) {
-      return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "");
-    }
+function chooseMode(qcm) {
+  isQCM = qcm;
+  document.getElementById('question-count').style.display = 'block';
+}
 
-    function checkAnswer(input, answer) {
-      const normInput = normalize(input);
-      const normAnswer = normalize(answer);
-      if (normInput === normAnswer) return "exact";
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
 
-      const inputWords = normInput.split(/\s|-/).filter(w => w.length >= 2);
-      const answerWords = normAnswer.split(/\s|-/).filter(w => w.length >= 3);
-      const partialMatch = inputWords.some(iw =>
-        answerWords.some(aw => aw.includes(iw) || iw.includes(aw))
-      );
-      return partialMatch ? "partial" : "wrong";
-    }
+function normalize(str) {
+  return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "");
+}
 
-    function startQuiz(nbQuestions) {
-      document.getElementById('start-menu').style.display = 'none';
-      score = 0;
-      current = 0;
-      order = shuffle([...data]).slice(0, nbQuestions);
-      showQuestion();
-    }
+function checkAnswer(input, answer) {
+  const normInput = normalize(input);
+  const normAnswer = normalize(answer);
+  if (normInput === normAnswer) return "exact";
 
-    function startTimer() {
-      timeLeft = 15;
-      document.getElementById('timer').innerText = `⏱ Temps restant : ${timeLeft}s`;
-      timer = setInterval(() => {
-        timeLeft--;
-        document.getElementById('timer').innerText = `⏱ Temps restant : ${timeLeft}s`;
-        if (timeLeft <= 0) {
-          clearInterval(timer);
-          result.innerHTML = `<div class="wrong">⏱ Temps écoulé !<br>Bonne réponse : <strong>${askForDate ? order[current].date : order[current].event}</strong></div>`;
-          soundWrong.play();
-          current++;
-          scoreboard.innerText = `Score : ${score.toFixed(2)}`;
-          setTimeout(showQuestion, 2500);
-        }
-      }, 1000);
-    }
+  const inputWords = normInput.split(/\s|-/).filter(w => w.length >= 2);
+  const answerWords = normAnswer.split(/\s|-/).filter(w => w.length >= 3);
+  const partialMatch = inputWords.some(iw =>
+    answerWords.some(aw => aw.includes(iw) || iw.includes(aw))
+  );
+  return partialMatch ? "partial" : "wrong";
+}
 
-    function showQuestion() {
-      result.innerHTML = '';
-      document.getElementById('timer').innerText = '';
-      if (current >= order.length) {
-        quiz.innerHTML = '';
-        result.innerHTML = `<div class="correct">🎉 Bravo ! Score final : ${score.toFixed(2)} / ${order.length}</div>
-        <button id="restart-btn" onclick="restartQuiz()">Rejouer</button>`;
-        return;
-      }
+function startQuiz(nbQuestions) {
+  document.getElementById('start-menu').style.display = 'none';
+  score = 0;
+  current = 0;
+  order = shuffle([...data]).slice(0, nbQuestions);
+  showQuestion();
+}
 
-      const item = order[current];
-      askForDate = Math.random() < 0.5;
-      const question = askForDate
-        ? `<p><strong>Quelle est la <u>date</u> associée à :</strong><br>${item.event}</p>`
-        : `<p><strong>Quel est l’<u>événement</u> associé à la date :</strong><br>${item.date}</p>`;
-
-      quiz.innerHTML = `
-        <div class="question">
-          ${question}
-          <input type="text" id="answer" placeholder="Votre réponse ici...">
-          <button onclick="submitAnswer()">Valider</button>
-        </div>
-      `;
-      startTimer();
-    }
-
-    function submitAnswer() {
+function startTimer() {
+  timeLeft = 45;
+  document.getElementById('timer').innerText = `⏱ Temps restant : ${timeLeft}s`;
+  timer = setInterval(() => {
+    timeLeft--;
+    document.getElementById('timer').innerText = `⏱ Temps restant : ${timeLeft}s`;
+    if (timeLeft <= 0) {
       clearInterval(timer);
-      const userInput = document.getElementById('answer').value;
-      const item = order[current];
-      const correctAnswer = askForDate ? item.date : item.event;
-      const resultType = checkAnswer(userInput, correctAnswer);
-
-      let message = "", cssClass = "";
-
-      if (resultType === "exact") {
-        score += 1;
-        soundCorrect.play();
-        message = `✅ Bonne réponse !`;
-        cssClass = "correct";
-      } else if (resultType === "partial") {
-        score += 0.75;
-        soundCorrect.play();
-        message = `🟧 Réponse partiellement correcte.<br>Bonne réponse : <strong>${correctAnswer}</strong>`;
-        cssClass = "partial";
-      } else {
-        soundWrong.play();
-        message = `❌ Mauvaise réponse.<br>Bonne réponse : <strong>${correctAnswer}</strong>`;
-        cssClass = "wrong";
-      }
-
-      result.innerHTML = `<div class="${cssClass}">${message}</div>`;
-      scoreboard.innerText = `Score : ${score.toFixed(2)}`;
+      document.getElementById('result').innerHTML = `<div class="wrong">⏱ Temps écoulé !<br>Bonne réponse : <strong>${askForDate ? order[current].date : order[current].event}</strong></div>`;
       current++;
       setTimeout(showQuestion, 2500);
     }
+  }, 1000);
+}
 
-    function restartQuiz() {
-      document.getElementById('start-menu').style.display = 'block';
-      quiz.innerHTML = '';
-      result.innerHTML = '';
-      scoreboard.innerText = 'Score : 0';
-      document.getElementById('timer').innerText = '';
+function showQuestion() {
+  clearInterval(timer);
+  document.getElementById('result').innerHTML = '';
+  document.getElementById('timer').innerText = '';
+  if (current >= order.length) {
+    document.getElementById('quiz').innerHTML = `<div class="correct">🎉 Fin du quiz ! Score : ${score} / ${order.length}</div>`;
+    return;
+  }
+
+  const item = order[current];
+  askForDate = Math.random() < 0.5;
+  const questionText = askForDate
+    ? `Quelle est la <strong>date</strong> associée à :<br><em>${item.event}</em>`
+    : `Quel est l’<strong>événement</strong> associé à :<br><em>${item.date}</em>`;
+
+  if (isQCM) {
+    const correct = askForDate ? item.date : item.event;
+    const field = askForDate ? "date" : "event";
+    const propositions = [correct];
+
+    while (propositions.length < 4) {
+      const random = data[Math.floor(Math.random() * data.length)][field];
+      if (!propositions.includes(random)) propositions.push(random);
     }
-  </script>
+
+    shuffle(propositions);
+
+    const buttons = propositions.map(p => `<button onclick="submitAnswer('${p.replace(/'/g, "\\'")}')">${p}</button>`).join("<br>");
+    document.getElementById('quiz').innerHTML = `<div class="question"><p>${questionText}</p>${buttons}</div>`;
+  } else {
+    document.getElementById('quiz').innerHTML = `
+      <div class="question">
+        <p>${questionText}</p>
+        <input type="text" id="answer" placeholder="Votre réponse ici...">
+        <button onclick="submitAnswer()">Valider</button>
+      </div>`;
+  }
+
+  startTimer();
+}
+
+function submitAnswer(value = null) {
+  clearInterval(timer);
+  const item = order[current];
+  const correctAnswer = askForDate ? item.date : item.event;
+  const userInput = value !== null ? value : document.getElementById('answer').value;
+  const resultType = checkAnswer(userInput, correctAnswer);
+  const correctSound = document.getElementById('sound-correct');
+const wrongSound = document.getElementById('sound-wrong');
+const partialSound = document.getElementById('sound-partial');
+
+  let message = "", cssClass = "";
+  if (resultType === "exact") {
+  correctSound.play();
+  score += 1;
+  message = `✅ Bonne réponse !`;
+  cssClass = "correct";
+} else if (resultType === "partial") {
+  partialSound.play();
+  score += 0.75;
+  message = `🟧 Réponse partielle. Bonne réponse : <strong>${correctAnswer}</strong>`;
+  cssClass = "partial";
+} else {
+  wrongSound.play();
+  message = `❌ Mauvaise réponse. Bonne réponse : <strong>${correctAnswer}</strong>`;
+  cssClass = "wrong";
+}
+
+
+  document.getElementById('result').innerHTML = `<div class="${cssClass}">${message}</div>`;
+  document.getElementById('scoreboard').innerText = `Score : ${score.toFixed(2)} / ${order.length}`;
+  current++;
+  setTimeout(showQuestion, 2500);
+}
+</script>
 </body>
 </html>
