@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Dates du Brevet</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      max-width: 700px;
+      margin: auto;
+      background: linear-gradient(to bottom, #e6f0ff, #ffffff);
+    }
+    .question {
+      margin: 20px 0;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      font-size: 1em;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #0052cc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #003d99;
+    }
+    #scoreboard {
+      font-weight: bold;
+      margin-bottom: 20px;
+      font-size: 1.2em;
+      color: #333;
+    }
+    img {
+      width: 100%;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    .correct {
+      background-color: #d4edda;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 10px;
+      color: #155724;
+    }
+    .wrong {
+      background-color: #f8d7da;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 10px;
+      color: #721c24;
+    }
+  </style>
+</head>
+<body>
+  <h1>Quiz Dates du Brevet</h1>
+  <div id="scoreboard">Score : 0</div>
+  <div id="quiz"></div>
+  <div class="result" id="result"></div>
+
+  <audio id="sound-correct" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+  <audio id="sound-wrong" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
+
+  <script>
+    const data = [
+  { date: "3 août 1914", event: "L'Allemagne déclare la guerre à la France" },
+  { date: "août - octobre 1914", event: "Guerre de mouvement" },
+  { date: "novembre 1914 - mars 1918", event: "Guerre de position (tranchées)" },
+  { date: "mars - novembre 1918", event: "Reprise de la guerre de mouvement" },
+  { date: "1915 - 1916", event: "Génocide des Arméniens par l'Empire Ottoman" },
+  { date: "21 février - 18 décembre 1916", event: "Bataille de Verdun" },
+  { date: "1er juillet - 18 novembre 1916", event: "Bataille de la Somme" },
+  { date: "6 avril 1917", event: "Entrée en guerre des États-Unis" },
+  { date: "16 avril 1917", event: "Bataille du chemin des Dames et mutineries" },
+  { date: "7 novembre 1917", event: "Révolution d'Octobre en Russie" },
+  { date: "8 janvier 1918", event: "Discours des 14 points de Wilson" },
+  { date: "3 mars 1918", event: "Traité de Brest-Litovsk (Allemagne - Russie)" },
+  { date: "juillet 1918", event: "Seconde bataille de la Marne" },
+  { date: "11 novembre 1918", event: "Signature de l'armistice" },
+  { date: "28 juin 1919", event: "Traité de Versailles" },
+  { date: "1917", event: "Révolutions russes" },
+  { date: "octobre 1929", event: "Crise boursière aux États-Unis" },
+  { date: "1922 - 1943", event: "Mussolini au pouvoir en Italie" },
+  { date: "1924 - 1953", event: "Staline au pouvoir en URSS" },
+  { date: "1933 - 1945", event: "Hitler au pouvoir en Allemagne" },
+  { date: "1936 - 1938", event: "Front populaire en France" },
+  { date: "1939", event: "Début de la Seconde Guerre mondiale" },
+  { date: "1er septembre 1939", event: "Invasion de la Pologne" },
+  { date: "3 septembre 1939", event: "Déclaration de guerre par France et Royaume-Uni" },
+  { date: "avril 1940", event: "Invasion du Danemark et de la Norvège" },
+  { date: "10 mai 1940", event: "Invasion de la France" },
+  { date: "18 juin 1940", event: "Appel du Général de Gaulle à la BBC" },
+  { date: "22 juin 1940", event: "Armistice signé avec l’Allemagne" },
+  { date: "22 juin 1941", event: "Invasion de l’URSS par l’Allemagne" },
+  { date: "7 décembre 1941", event: "Attaque de Pearl Harbor" },
+  { date: "1942", event: "Occupation de nombreux territoires par l’Axe" },
+  { date: "juin 1942", event: "Bataille de Midway (tournant du Pacifique)" },
+  { date: "juillet 1942", event: "Rafle du Vel d’Hiv à Paris" },
+  { date: "sept. 1942 - fév. 1943", event: "Bataille de Stalingrad" },
+  { date: "8 novembre 1942", event: "Débarquement allié en Afrique du Nord" },
+  { date: "mai 1943", event: "Création du CNR (Conseil National de la Résistance)" },
+  { date: "6 juin 1944", event: "Débarquement en Normandie" },
+  { date: "30 avril 1945", event: "Suicide d’Hitler" },
+  { date: "8 mai 1945", event: "Capitulation allemande" },
+  { date: "6 août 1945", event: "Bombe atomique sur Hiroshima" },
+  { date: "9 août 1945", event: "Bombe atomique sur Nagasaki" },
+  { date: "2 septembre 1945", event: "Capitulation du Japon" }
+]; // utilise les données existantes du script
+    let current = 0;
+    let score = 0;
+    let order = shuffle([...data]);
+    let askForDate = true;
+
+    const quiz = document.getElementById('quiz');
+    const result = document.getElementById('result');
+    const scoreboard = document.getElementById('scoreboard');
+    const soundCorrect = document.getElementById('sound-correct');
+    const soundWrong = document.getElementById('sound-wrong');
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function normalize(str) {
+      return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "");
+    }
+
+    function checkAnswer(input, answer) {
+  const normalizedInput = normalize(input);
+  const normalizedAnswer = normalize(answer);
+  const answerParts = normalizedAnswer.split(/\s|-/).filter(w => w.length > 2);
+  const inputParts = normalizedInput.split(/\s|-/).filter(w => w.length > 1);
+
+  return answerParts.some(word =>
+    inputParts.some(inp =>
+      word.includes(inp) || inp.includes(word)
+    )
+  );
+}
+
+    function showQuestion() {
+      result.innerHTML = '';
+      if (current >= order.length) {
+        quiz.innerHTML = '';
+        result.innerHTML = `<div class="correct">🎉 Bravo ! Score final : ${score} / ${order.length}</div>`;
+        return;
+      }
+
+      const item = order[current];
+      askForDate = Math.random() < 0.5;
+
+      const question = askForDate
+        ? `<p><strong>Quelle est la <u>date</u> associée à :</strong><br>${item.event}</p>`
+        : `<p><strong>Quel est l’<u>événement</u> associé à la date :</strong><br>${item.date}</p>`;
+
+      quiz.innerHTML = `
+        <div class="question">
+          ${question}
+          <input type="text" id="answer" placeholder="Votre réponse ici...">
+          <button onclick="submitAnswer()">Valider</button>
+          <img src="https://source.unsplash.com/600x200/?history,school" alt="Illustration aléatoire">
+        </div>
+      `;
+    }
+
+    function submitAnswer() {
+      const userInput = document.getElementById('answer').value;
+      const item = order[current];
+      const correct = askForDate ? item.date : item.event;
+      const isCorrect = checkAnswer(userInput, correct);
+
+      if (isCorrect) {
+        score++;
+        soundCorrect.play();
+        result.innerHTML = `<div class="correct">✅ Bonne réponse !</div>`;
+      } else {
+        soundWrong.play();
+        result.innerHTML = `<div class="wrong">❌ Mauvaise réponse. La bonne réponse était : <strong>${correct}</strong></div>`;
+      }
+      current++;
+      scoreboard.innerText = `Score : ${score}`;
+      setTimeout(showQuestion, 2000);
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
