@@ -152,10 +152,6 @@
       return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "");
     }
 
-    function normalize(str) {
-  return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "");
-}
-
 function checkAnswer(input, answer) {
   const normInput = normalize(input);
   const normAnswer = normalize(answer);
