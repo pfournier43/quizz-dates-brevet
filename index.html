@@ -148,12 +148,14 @@
     function checkAnswer(input, answer) {
   const normalizedInput = normalize(input);
   const normalizedAnswer = normalize(answer);
-  const answerParts = normalizedAnswer.split(/\s|-/).filter(w => w.length > 2);
-  const inputParts = normalizedInput.split(/\s|-/).filter(w => w.length > 1);
 
-  return answerParts.some(word =>
-    inputParts.some(inp =>
-      word.includes(inp) || inp.includes(word)
+  const answerWords = normalizedAnswer.split(/\s|-/).filter(w => w.length >= 3);
+  const userWords = normalizedInput.split(/\s|-/).filter(w => w.length >= 2);
+
+  // La réponse est correcte si au moins un mot de la réponse contient (ou est contenu dans) un mot saisi
+  return userWords.some(userWord =>
+    answerWords.some(answerWord =>
+      answerWord.includes(userWord) || userWord.includes(answerWord)
     )
   );
 }
