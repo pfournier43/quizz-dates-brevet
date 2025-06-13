@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Quiz Dates du Brevet</title>
   <style>
     body {
@@ -47,11 +47,6 @@
       font-size: 1.2em;
       color: #333;
     }
-    img {
-      width: 100%;
-      border-radius: 8px;
-      margin-top: 10px;
-    }
     .correct {
       background-color: #d4edda;
       padding: 10px;
@@ -67,12 +62,31 @@
       color: #721c24;
     }
     .partial {
-  background-color: #fff3cd;
-  padding: 10px;
-  border-radius: 5px;
-  margin-top: 10px;
-  color: #856404;
-}
+      background-color: #fff3cd;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 10px;
+      color: #856404;
+    }
+    #timer {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #d9534f;
+      margin-top: 10px;
+    }
+    #restart-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1em;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #restart-btn:hover {
+      background-color: #218838;
+    }
   </style>
 </head>
 <body>
@@ -80,65 +94,69 @@
   <div id="scoreboard">Score : 0</div>
   <div id="quiz"></div>
   <div class="result" id="result"></div>
-<div id="start-menu">
-  <p>Combien de questions voulez-vous ?</p>
-  <button onclick="startQuiz(5)">5</button>
-  <button onclick="startQuiz(10)">10</button>
-  <button onclick="startQuiz(20)">20</button>
-  <button onclick="startQuiz(data.length)">Toutes</button>
-</div>
+  <div id="timer"></div>
+  <div id="start-menu">
+    <p>Combien de questions voulez-vous ?</p>
+    <button onclick="startQuiz(5)">5</button>
+    <button onclick="startQuiz(10)">10</button>
+    <button onclick="startQuiz(20)">20</button>
+    <button onclick="startQuiz(data.length)">Toutes</button>
+  </div>
   <audio id="sound-correct" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
   <audio id="sound-wrong" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
 
   <script>
     const data = [
-  { date: "3 août 1914", event: "L'Allemagne déclare la guerre à la France" },
-  { date: "août - octobre 1914", event: "Guerre de mouvement" },
-  { date: "novembre 1914 - mars 1918", event: "Guerre de position (tranchées)" },
-  { date: "mars - novembre 1918", event: "Reprise de la guerre de mouvement" },
-  { date: "1915 - 1916", event: "Génocide des Arméniens par l'Empire Ottoman" },
-  { date: "21 février - 18 décembre 1916", event: "Bataille de Verdun" },
-  { date: "1er juillet - 18 novembre 1916", event: "Bataille de la Somme" },
-  { date: "6 avril 1917", event: "Entrée en guerre des États-Unis" },
-  { date: "16 avril 1917", event: "Bataille du chemin des Dames et mutineries" },
-  { date: "7 novembre 1917", event: "Révolution d'Octobre en Russie" },
-  { date: "8 janvier 1918", event: "Discours des 14 points de Wilson" },
-  { date: "3 mars 1918", event: "Traité de Brest-Litovsk (Allemagne - Russie)" },
-  { date: "juillet 1918", event: "Seconde bataille de la Marne" },
-  { date: "11 novembre 1918", event: "Signature de l'armistice" },
-  { date: "28 juin 1919", event: "Traité de Versailles" },
-  { date: "1917", event: "Révolutions russes" },
-  { date: "octobre 1929", event: "Crise boursière aux États-Unis" },
-  { date: "1922 - 1943", event: "Mussolini au pouvoir en Italie" },
-  { date: "1924 - 1953", event: "Staline au pouvoir en URSS" },
-  { date: "1933 - 1945", event: "Hitler au pouvoir en Allemagne" },
-  { date: "1936 - 1938", event: "Front populaire en France" },
-  { date: "1939", event: "Début de la Seconde Guerre mondiale" },
-  { date: "1er septembre 1939", event: "Invasion de la Pologne" },
-  { date: "3 septembre 1939", event: "Déclaration de guerre par France et Royaume-Uni" },
-  { date: "avril 1940", event: "Invasion du Danemark et de la Norvège" },
-  { date: "10 mai 1940", event: "Invasion de la France" },
-  { date: "18 juin 1940", event: "Appel du Général de Gaulle à la BBC" },
-  { date: "22 juin 1940", event: "Armistice signé avec l’Allemagne" },
-  { date: "22 juin 1941", event: "Invasion de l’URSS par l’Allemagne" },
-  { date: "7 décembre 1941", event: "Attaque de Pearl Harbor" },
-  { date: "1942", event: "Occupation de nombreux territoires par l’Axe" },
-  { date: "juin 1942", event: "Bataille de Midway (tournant du Pacifique)" },
-  { date: "juillet 1942", event: "Rafle du Vel d’Hiv à Paris" },
-  { date: "sept. 1942 - fév. 1943", event: "Bataille de Stalingrad" },
-  { date: "8 novembre 1942", event: "Débarquement allié en Afrique du Nord" },
-  { date: "mai 1943", event: "Création du CNR (Conseil National de la Résistance)" },
-  { date: "6 juin 1944", event: "Débarquement en Normandie" },
-  { date: "30 avril 1945", event: "Suicide d’Hitler" },
-  { date: "8 mai 1945", event: "Capitulation allemande" },
-  { date: "6 août 1945", event: "Bombe atomique sur Hiroshima" },
-  { date: "9 août 1945", event: "Bombe atomique sur Nagasaki" },
-  { date: "2 septembre 1945", event: "Capitulation du Japon" }
-]; // utilise les données existantes du script
+      { date: "3 août 1914", event: "L'Allemagne déclare la guerre à la France" },
+      { date: "août - octobre 1914", event: "Guerre de mouvement" },
+      { date: "novembre 1914 - mars 1918", event: "Guerre de position (tranchées)" },
+      { date: "mars - novembre 1918", event: "Reprise de la guerre de mouvement" },
+      { date: "1915 - 1916", event: "Génocide des Arméniens par l'Empire Ottoman" },
+      { date: "21 février - 18 décembre 1916", event: "Bataille de Verdun" },
+      { date: "1er juillet - 18 novembre 1916", event: "Bataille de la Somme" },
+      { date: "6 avril 1917", event: "Entrée en guerre des États-Unis" },
+      { date: "16 avril 1917", event: "Bataille du chemin des Dames et mutineries" },
+      { date: "7 novembre 1917", event: "Révolution d'Octobre en Russie" },
+      { date: "8 janvier 1918", event: "Discours des 14 points de Wilson" },
+      { date: "3 mars 1918", event: "Traité de Brest-Litovsk (Allemagne - Russie)" },
+      { date: "juillet 1918", event: "Seconde bataille de la Marne" },
+      { date: "11 novembre 1918", event: "Signature de l'armistice" },
+      { date: "28 juin 1919", event: "Traité de Versailles" },
+      { date: "1917", event: "Révolutions russes" },
+      { date: "octobre 1929", event: "Crise boursière aux États-Unis" },
+      { date: "1922 - 1943", event: "Mussolini au pouvoir en Italie" },
+      { date: "1924 - 1953", event: "Staline au pouvoir en URSS" },
+      { date: "1933 - 1945", event: "Hitler au pouvoir en Allemagne" },
+      { date: "1936 - 1938", event: "Front populaire en France" },
+      { date: "1939", event: "Début de la Seconde Guerre mondiale" },
+      { date: "1er septembre 1939", event: "Invasion de la Pologne" },
+      { date: "3 septembre 1939", event: "Déclaration de guerre par France et Royaume-Uni" },
+      { date: "avril 1940", event: "Invasion du Danemark et de la Norvège" },
+      { date: "10 mai 1940", event: "Invasion de la France" },
+      { date: "18 juin 1940", event: "Appel du Général de Gaulle à la BBC" },
+      { date: "22 juin 1940", event: "Armistice signé avec l’Allemagne" },
+      { date: "22 juin 1941", event: "Invasion de l’URSS par l’Allemagne" },
+      { date: "7 décembre 1941", event: "Attaque de Pearl Harbor" },
+      { date: "1942", event: "Occupation de nombreux territoires par l’Axe" },
+      { date: "juin 1942", event: "Bataille de Midway (tournant du Pacifique)" },
+      { date: "juillet 1942", event: "Rafle du Vel d’Hiv à Paris" },
+      { date: "sept. 1942 - fév. 1943", event: "Bataille de Stalingrad" },
+      { date: "8 novembre 1942", event: "Débarquement allié en Afrique du Nord" },
+      { date: "mai 1943", event: "Création du CNR (Conseil National de la Résistance)" },
+      { date: "6 juin 1944", event: "Débarquement en Normandie" },
+      { date: "30 avril 1945", event: "Suicide d’Hitler" },
+      { date: "8 mai 1945", event: "Capitulation allemande" },
+      { date: "6 août 1945", event: "Bombe atomique sur Hiroshima" },
+      { date: "9 août 1945", event: "Bombe atomique sur Nagasaki" },
+      { date: "2 septembre 1945", event: "Capitulation du Japon" }
+    ];
+
     let current = 0;
-let score = 0;
-let order = [];
-let askForDate = true;
+    let score = 0;
+    let order = [];
+    let askForDate = true;
+    let timer;
+    let timeLeft = 15;
 
     const quiz = document.getElementById('quiz');
     const result = document.getElementById('result');
@@ -158,39 +176,56 @@ let askForDate = true;
       return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "");
     }
 
-function checkAnswer(input, answer) {
-  const normInput = normalize(input);
-  const normAnswer = normalize(answer);
+    function checkAnswer(input, answer) {
+      const normInput = normalize(input);
+      const normAnswer = normalize(answer);
+      if (normInput === normAnswer) return "exact";
 
-  if (normInput === normAnswer) {
-    return "exact";
-  }
+      const inputWords = normInput.split(/\s|-/).filter(w => w.length >= 2);
+      const answerWords = normAnswer.split(/\s|-/).filter(w => w.length >= 3);
+      const partialMatch = inputWords.some(iw =>
+        answerWords.some(aw => aw.includes(iw) || iw.includes(aw))
+      );
+      return partialMatch ? "partial" : "wrong";
+    }
 
-  const inputWords = normInput.split(/\s|-/).filter(w => w.length >= 2);
-  const answerWords = normAnswer.split(/\s|-/).filter(w => w.length >= 3);
+    function startQuiz(nbQuestions) {
+      document.getElementById('start-menu').style.display = 'none';
+      score = 0;
+      current = 0;
+      order = shuffle([...data]).slice(0, nbQuestions);
+      showQuestion();
+    }
 
-  const partialMatch = inputWords.some(iw =>
-    answerWords.some(aw => aw.includes(iw) || iw.includes(aw))
-  );
+    function startTimer() {
+      timeLeft = 15;
+      document.getElementById('timer').innerText = `⏱ Temps restant : ${timeLeft}s`;
+      timer = setInterval(() => {
+        timeLeft--;
+        document.getElementById('timer').innerText = `⏱ Temps restant : ${timeLeft}s`;
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          result.innerHTML = `<div class="wrong">⏱ Temps écoulé !<br>Bonne réponse : <strong>${askForDate ? order[current].date : order[current].event}</strong></div>`;
+          soundWrong.play();
+          current++;
+          scoreboard.innerText = `Score : ${score.toFixed(2)}`;
+          setTimeout(showQuestion, 2500);
+        }
+      }, 1000);
+    }
 
-  return partialMatch ? "partial" : "wrong";
-}
-function startQuiz(nbQuestions) {
-  document.getElementById('start-menu').style.display = 'none';
-  order = shuffle([...data]).slice(0, nbQuestions);
-  showQuestion();
-}
     function showQuestion() {
       result.innerHTML = '';
+      document.getElementById('timer').innerText = '';
       if (current >= order.length) {
         quiz.innerHTML = '';
-        result.innerHTML = `<div class="correct">🎉 Bravo ! Score final : ${score} / ${order.length}</div>`;
+        result.innerHTML = `<div class="correct">🎉 Bravo ! Score final : ${score.toFixed(2)} / ${order.length}</div>
+        <button id="restart-btn" onclick="restartQuiz()">Rejouer</button>`;
         return;
       }
 
       const item = order[current];
       askForDate = Math.random() < 0.5;
-
       const question = askForDate
         ? `<p><strong>Quelle est la <u>date</u> associée à :</strong><br>${item.event}</p>`
         : `<p><strong>Quel est l’<u>événement</u> associé à la date :</strong><br>${item.date}</p>`;
@@ -202,31 +237,47 @@ function startQuiz(nbQuestions) {
           <button onclick="submitAnswer()">Valider</button>
         </div>
       `;
+      startTimer();
     }
 
     function submitAnswer() {
-  const userInput = document.getElementById('answer').value;
-  const item = order[current];
-  const correctAnswer = askForDate ? item.date : item.event;
-  const resultType = checkAnswer(userInput, correctAnswer);
+      clearInterval(timer);
+      const userInput = document.getElementById('answer').value;
+      const item = order[current];
+      const correctAnswer = askForDate ? item.date : item.event;
+      const resultType = checkAnswer(userInput, correctAnswer);
 
-  if (resultType === "exact" || resultType === "partial") {
-    score++;
-    soundCorrect.play();
-    const message = resultType === "exact"
-      ? `✅ Bonne réponse !`
-      : `🟧 Réponse partiellement correcte.<br>Bonne réponse : <strong>${correctAnswer}</strong>`;
-    result.innerHTML = `<div class="${resultType === "exact" ? 'correct' : 'partial'}">${message}</div>`;
-  } else {
-    soundWrong.play();
-    result.innerHTML = `<div class="wrong">❌ Mauvaise réponse.<br>Bonne réponse : <strong>${correctAnswer}</strong></div>`;
-  }
-  current++;
-  scoreboard.innerText = `Score : ${score}`;
-  setTimeout(showQuestion, 2500);
-}
+      let message = "", cssClass = "";
 
-    // showQuestion(); // Désactivé pour afficher le menu de démarrage
+      if (resultType === "exact") {
+        score += 1;
+        soundCorrect.play();
+        message = `✅ Bonne réponse !`;
+        cssClass = "correct";
+      } else if (resultType === "partial") {
+        score += 0.75;
+        soundCorrect.play();
+        message = `🟧 Réponse partiellement correcte.<br>Bonne réponse : <strong>${correctAnswer}</strong>`;
+        cssClass = "partial";
+      } else {
+        soundWrong.play();
+        message = `❌ Mauvaise réponse.<br>Bonne réponse : <strong>${correctAnswer}</strong>`;
+        cssClass = "wrong";
+      }
+
+      result.innerHTML = `<div class="${cssClass}">${message}</div>`;
+      scoreboard.innerText = `Score : ${score.toFixed(2)}`;
+      current++;
+      setTimeout(showQuestion, 2500);
+    }
+
+    function restartQuiz() {
+      document.getElementById('start-menu').style.display = 'block';
+      quiz.innerHTML = '';
+      result.innerHTML = '';
+      scoreboard.innerText = 'Score : 0';
+      document.getElementById('timer').innerText = '';
+    }
   </script>
 </body>
 </html>
