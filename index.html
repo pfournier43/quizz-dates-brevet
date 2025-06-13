@@ -80,7 +80,13 @@
   <div id="scoreboard">Score : 0</div>
   <div id="quiz"></div>
   <div class="result" id="result"></div>
-
+<div id="start-menu">
+  <p>Combien de questions voulez-vous ?</p>
+  <button onclick="startQuiz(5)">5</button>
+  <button onclick="startQuiz(10)">10</button>
+  <button onclick="startQuiz(20)">20</button>
+  <button onclick="startQuiz(data.length)">Toutes</button>
+</div>
   <audio id="sound-correct" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
   <audio id="sound-wrong" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
 
@@ -130,9 +136,9 @@
   { date: "2 septembre 1945", event: "Capitulation du Japon" }
 ]; // utilise les données existantes du script
     let current = 0;
-    let score = 0;
-    let order = shuffle([...data]);
-    let askForDate = true;
+let score = 0;
+let order = [];
+let askForDate = true;
 
     const quiz = document.getElementById('quiz');
     const result = document.getElementById('result');
@@ -169,7 +175,11 @@ function checkAnswer(input, answer) {
 
   return partialMatch ? "partial" : "wrong";
 }
-
+function startQuiz(nbQuestions) {
+  document.getElementById('start-menu').style.display = 'none';
+  order = shuffle([...data]).slice(0, nbQuestions);
+  showQuestion();
+}
     function showQuestion() {
       result.innerHTML = '';
       if (current >= order.length) {
@@ -217,7 +227,7 @@ function checkAnswer(input, answer) {
   setTimeout(showQuestion, 2500);
 }
 
-    showQuestion();
+    // showQuestion(); // Désactivé pour afficher le menu de démarrage
   </script>
 </body>
 </html>
